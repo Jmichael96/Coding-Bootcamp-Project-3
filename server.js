@@ -7,7 +7,7 @@ require('dotenv').config()
 const express = require('express')
 const bodyParser = require('body-parser')
 const session = require('express-session')
-const MongoStore = require('connect-mongo')(session)
+// const MongoStore = require('connect-mongo')(session)
 const dbConnection = require('./db') // loads our connection to the mongo database
 const passport = require('./passport')
 const app = express();
@@ -22,24 +22,40 @@ app.use(
 		extended: false
 	})
 );
+
+mongoose.Promise = global.Promise
+let MONGO_URL = 'mongodb://<dbuser>:<dbpassword>@ds221435.mlab.com:21435/heroku_mc9w7wpq';
+const MONGO_LOCAL_URL = 'mongodb://localhost/project-3';
+
+if (process.env.MONGODB_URI) {
+	mongoose.connect(process.env.MONGODB_URI)
+	MONGO_URL = process.env.MONGODB_URI
+} else {
+	mongoose.connect(MONGO_LOCAL_URL) // local mongo url
+	MONGO_URL = MONGO_LOCAL_URL
+}
+
+
+const db = mongoose.connection
+db.on('error', err => {
+	console.log(`There was an error connecting to the database: ${err}`)
+})
+db.once('open', () => {
+	console.log(
+		`You have successfully connected to your mongo database: ${MONGO_URL}`
+	)
+})
+
 app.use(bodyParser.json());
 app.use(
 	session({
 		secret: process.env.APP_SECRET || 'this is the default passphrase',
-    store: new MongoStore({ mongooseConnection: dbConnection, 
-    useNewUrlParser: true}),
+    // store: new MongoStore({ mongooseConnection: dbConnection}),
 		resave: false,
 		saveUninitialized: false
 	})
 );
-// Connect to the Mongo DB
-mongoose.connect(
-  process.env.MONGODB_URI || "mongodb://localhost/project-3",
-  {
-    useCreateIndex: true,
-    useNewUrlParser: true
-  }
-);
+
 // ===== Passport ====
 app.use(passport.initialize());
 app.use(passport.session());
