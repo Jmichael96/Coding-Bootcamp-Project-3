@@ -12,6 +12,7 @@ const dbConnection = require('./db') // loads our connection to the mongo databa
 const passport = require('./passport')
 const app = express();
 const PORT =  8080;
+const mongoose = require("mongoose");
 const logger = require("morgan");
 app.use(logger("dev"));
 // ===== Middleware ====
@@ -29,6 +30,14 @@ app.use(
 		resave: false,
 		saveUninitialized: false
 	})
+);
+// Connect to the Mongo DB
+mongoose.connect(
+  process.env.MONGODB_URI || "mongodb://localhost/project-3",
+  {
+    useCreateIndex: true,
+    useNewUrlParser: true
+  }
 );
 // ===== Passport ====
 app.use(passport.initialize());

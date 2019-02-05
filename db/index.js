@@ -3,8 +3,8 @@
 */
 const mongoose = require('mongoose')
 mongoose.Promise = global.Promise
-let MONGO_URL
-const MONGO_LOCAL_URL =  process.env.MONGODB_URI || 'mongodb://localhost/project-3';
+let MONGO_URL = 'mongodb://<dbuser>:<dbpassword>@ds221435.mlab.com:21435/heroku_mc9w7wpq';
+const MONGO_LOCAL_URL = 'mongodb://localhost/project-3';
 
 if (process.env.MONGODB_URI) {
 	mongoose.connect(process.env.MONGODB_URI)
@@ -14,7 +14,7 @@ if (process.env.MONGODB_URI) {
 	MONGO_URL = MONGO_LOCAL_URL
 }
 
-// should mongoose.connection be put in the call back of mongoose.connect???
+
 const db = mongoose.connection
 db.on('error', err => {
 	console.log(`There was an error connecting to the database: ${err}`)
