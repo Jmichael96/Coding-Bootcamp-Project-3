@@ -107,7 +107,7 @@ class App extends Component {
           {/* <Redirect to={{ pathname: this.state.redirectTo }} /> */}
           <Greeting id="greeting" user={this.state.user} />
           <DisplayLinks _logout={this._logout} loggedIn={this.state.loggedIn} />
-          <Route exact path="/" component={Home} />} />
+          <Route exact path="/" render={() => <Home user={this.state.user} />} />
           <Route exact path="/login" render={() => <LoginForm _login={this._login} />} />
           <Route exact path="/signup" component={Signup} />
           <Route exact path="/profile" user={this.state.user} render={() => <Profile user={this.state.user} />} />
