@@ -11,6 +11,7 @@ const MongoStore = require('connect-mongo')(session)
 const dbConnection = require('./db') // loads our connection to the mongo database
 const passport = require('./passport')
 const app = express();
+var path = require("path");
 const PORT = process.env.PORT || 8080;
 const mongoose = require("mongoose");
 const logger = require("morgan");
