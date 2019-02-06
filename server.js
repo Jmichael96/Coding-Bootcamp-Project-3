@@ -34,6 +34,9 @@ app.use(
 // ===== Passport ====
 app.use(passport.initialize());
 app.use(passport.session());
+app.get("/", (req, res) =>{
+  res.sendfile(path.join(__dirname, './client/src/public'));
+});
 // calling in api routes
 app.use("/api", require("./routes")); 
 // ==== if its production environment!
